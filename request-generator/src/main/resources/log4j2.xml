@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="10">
+    <Properties>
+        <Property name="pattern">%d{dd-MM-yyyy HH:mm:ss.SSS} %-5level %-40c{2}: %-100m %X &lt;%marker&gt; %n%rEx </Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="console"/>
+        </Root>
+    </Loggers>
+</Configuration>
