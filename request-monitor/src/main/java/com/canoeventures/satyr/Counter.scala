@@ -1,6 +1,8 @@
 package com.canoeventures.satyr
 
 import com.canoeventures.common.zookeeper.config.{ConfigManager, ConfigurationProxy, DeploymentManager}
+import com.typesafe.config.ConfigFactory
+import com.typesafe.scalalogging.StrictLogging
 import kamon.Kamon
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -13,7 +15,7 @@ import org.apache.spark.streaming.{Duration, StreamingContext}
 
 import scala.util.Try
 
-abstract class Counter(val appName : String) {
+abstract class Counter(val appName : String) extends StrictLogging {
    implicit def asCommitter[A](stream : InputDStream[A]) : CommitterStream[A] = new CommitterStream(stream)
 
    val config = ConfigManager.root.createManager("satyr")
@@ -41,13 +43,13 @@ abstract class Counter(val appName : String) {
    def createStream(topic : String, group : String = appName): InputDStream[ConsumerRecord[String, String]] = {
       val params = this.baseKafkaParams() + ("group.id" -> group)
       val strategy = Subscribe[String, String](Array(DeploymentManager.kafkaTopicProvider()(topic)), params)
+      logger.info(s"Subscribing to the '${DeploymentManager.kafkaTopicProvider()(topic)}' kafka stream")
       KafkaUtils.createDirectStream[String, String](ssc, PreferConsistent, strategy)
-
    }
 
 
    def start() = {
-      Kamon.start(ConfigManager.root.createManager("kamon").config())
+      Kamon.start(ConfigManager.root.createManager("kamon").config().withFallback(ConfigFactory.defaultReference()))
       config.registerAndCall(setup)
    }
 

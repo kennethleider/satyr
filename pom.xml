@@ -10,6 +10,7 @@
 
     <modules>
         <module>request-monitor</module>
+        <module>functional-tests</module>
         <module>request-generator</module>
         <module>setup</module>
     </modules>

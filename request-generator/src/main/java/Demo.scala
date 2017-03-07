@@ -47,7 +47,7 @@ object Demo {
 //      )
 
       val simulation = new Simulation(producer, 50, 15, 10)
-      simulation.run(1000, start)
+      simulation.run(100000, start)
 
       producer.close()
    }

@@ -12,7 +12,7 @@ class SessionCounter extends Counter("SessionCounter") {
    override def setupStreams() : Unit = {
       val stream = createStream("requests")
       stream.withCommit { rdd =>
-         println(rdd.count())
+         logger.warn(s"Starting new rdd with size: ${rdd.count()}")
          val keys = rdd.map { record =>
             val Array(operator, providerId, platform, region, backOffice) = record.value.split("-")
             Key(operator, providerId, platform, region, backOffice)
