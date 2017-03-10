@@ -1,11 +1,12 @@
 package com.canoeventures.satyr
 
+
 import com.canoeventures.common.zookeeper.config.{ConfigManager, ConfigurationProxy, DeploymentManager}
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.StrictLogging
 import kamon.Kamon
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.apache.kafka.common.serialization.StringDeserializer
+import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka010.ConsumerStrategies._
@@ -34,17 +35,17 @@ abstract class Counter(val appName : String) extends StrictLogging {
 
    def baseKafkaParams() : Map[String, Object] = Map[String, Object](
       "key.deserializer" -> classOf[StringDeserializer],
-      "value.deserializer" -> classOf[StringDeserializer],
+      "value.deserializer" -> classOf[ByteArrayDeserializer],
       "auto.offset.reset" -> "latest",
       "enable.auto.commit" -> (false: java.lang.Boolean),
       "bootstrap.servers" -> config.getStringList("kafka.bootstrap-servers").get.mkString(",")
    )
 
-   def createStream(topic : String, group : String = appName): InputDStream[ConsumerRecord[String, String]] = {
+   def createStream(topic : String, group : String = appName): InputDStream[ConsumerRecord[String, Array[Byte]]] = {
       val params = this.baseKafkaParams() + ("group.id" -> group)
-      val strategy = Subscribe[String, String](Array(DeploymentManager.kafkaTopicProvider()(topic)), params)
+      val strategy = Subscribe[String, Array[Byte]](Array(DeploymentManager.kafkaTopicProvider()(topic)), params)
       logger.info(s"Subscribing to the '${DeploymentManager.kafkaTopicProvider()(topic)}' kafka stream")
-      KafkaUtils.createDirectStream[String, String](ssc, PreferConsistent, strategy)
+      KafkaUtils.createDirectStream[String, Array[Byte]](ssc, PreferConsistent, strategy)
    }
 
 

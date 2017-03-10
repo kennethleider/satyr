@@ -9,10 +9,10 @@ object Demo {
          "bootstrap.servers" -> "cv-dvhdata04.cv.scrum:9092",
          "group.id" -> "satyr",
          "key.serializer" -> "org.apache.kafka.common.serialization.StringSerializer",
-         "value.serializer" -> "org.apache.kafka.common.serialization.StringSerializer"
+         "value.serializer" -> "org.apache.kafka.common.serialization.ByteArraySerializer"
       )
 
-      val producer = new KafkaProducer[String, String](props.asJava)
+      val producer = new KafkaProducer[String, Array[Byte]](props.asJava)
 
       val start = new SessionPropertyGenerator(
          operatorSelector = new Selector("comcast" -> 7, "charter" -> 3, "cox" -> 2),
@@ -47,7 +47,7 @@ object Demo {
 //      )
 
       val simulation = new Simulation(producer, 50, 15, 10)
-      simulation.run(100000, start)
+      simulation.run(100, start)
 
       producer.close()
    }

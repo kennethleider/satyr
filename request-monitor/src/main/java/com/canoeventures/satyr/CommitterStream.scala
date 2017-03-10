@@ -12,4 +12,10 @@ class CommitterStream[A](stream : InputDStream[A]) {
          stream.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
       }
    }
+
+   def ifNotEmpty(foreachFunc : RDD[A] => Unit) : RDD[A] => Unit = { rdd =>
+      if (rdd.count() > 0) {
+         foreachFunc(rdd)
+      }
+   }
 }

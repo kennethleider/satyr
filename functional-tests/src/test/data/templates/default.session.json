@@ -1,0 +1,21 @@
+{
+  "transactionId": "[UUID]",
+  "wrapperDateTime": "[DATETIME]",
+  "wrapperNw": "nw12",
+  "wrapperAdm": "192.0.0.1",
+  "wrapperAds": "192.0.0.1",
+  "operator": "comcast",
+  "sessionId": "[UUID]",
+  "sessionStartDateTime": "[DATETIME]",
+  "providerId": "abc_hd",
+  "assetId": "undefined",
+  "provider": "undefined",
+  "network": "undefined",
+  "programmer": "undefined",
+  "deviceId": "undefined",
+  "householdId": "undefined",
+  "platform": "stb",
+  "region": "A",
+  "VodBackOffice": "Xi3",
+  "acceptedDateTime": "date-time"
+}

@@ -22,4 +22,12 @@
         <cucumber.log.config.file>satyr.log4j2.xml</cucumber.log.config.file>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.canoeventures.common-lib</groupId>
+            <artifactId>common-cao</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 </project>
